@@ -10,6 +10,7 @@ namespace Jewelry.Data
     public class UnitOfWork
     {
         private RequestRepository _request;
+        private RequestDetailRepository _requestDetail;
 
         public UnitOfWork() 
         {
@@ -20,6 +21,14 @@ namespace Jewelry.Data
             get
             {
                 return _request ??= new Repository.RequestRepository();
+            }
+        }
+
+        public RequestDetailRepository RequestDetailRepository
+        {
+            get
+            {
+                return _requestDetail ??= new Repository.RequestDetailRepository();
             }
         }
     }

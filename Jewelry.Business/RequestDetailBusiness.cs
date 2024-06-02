@@ -1,33 +1,28 @@
 ﻿using Jewelry.Business.Base;
-using Jewelry.Data;
 using Jewelry.Common;
+using Jewelry.Data;
+using Jewelry.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
-using System.Net.Http.Headers;
-using Jewelry.Data.Models;
 
 namespace Jewelry.Business
 {
-
-    public interface IRequestBusiness
+    public interface IRequestDetailBusiness
     {
         Task<IBusinessResult> GetAll();
         Task<IBusinessResult> GetById(string code);
-        Task<IBusinessResult> Save(Request request);
-        Task<IBusinessResult> Update(Request request);
+        Task<IBusinessResult> Save(RequestDetail requestDetail);
+        Task<IBusinessResult> Update(RequestDetail requestDetail);
         Task<IBusinessResult> DeleteById(string code);
     }
-
-    public class RequestBusiness : IRequestBusiness
+    public class RequestDetailBusiness : IRequestDetailBusiness
     {
-
         private readonly UnitOfWork _unitOfWork;
 
-        public RequestBusiness()
+        public RequestDetailBusiness()
         {
             _unitOfWork ??= new UnitOfWork();
         }
@@ -38,14 +33,14 @@ namespace Jewelry.Business
             {
                 #region Business rule
                 #endregion
-                var request = await _unitOfWork.RequestRepository.GetAllAsync();
-                if (request == null)
+                var requestDetail = await _unitOfWork.RequestDetailRepository.GetAllAsync();
+                if (requestDetail == null)
                 {
                     return new BusinessResult(Const.WARNING_NO_DATA_CODE, Const.WARNING_NO_DATA__MSG);
                 }
                 else
                 {
-                    return new BusinessResult(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, request);
+                    return new BusinessResult(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, requestDetail);
                 }
             }
             catch (Exception ex)
@@ -60,14 +55,14 @@ namespace Jewelry.Business
             {
                 #region Business rule
                 #endregion
-                var request = await _unitOfWork.RequestRepository.GetByIdAsync(code);
-                if (request == null)
+                var requestDetail = await _unitOfWork.RequestDetailRepository.GetByIdAsync(code);
+                if (requestDetail == null)
                 {
                     return new BusinessResult(Const.WARNING_NO_DATA_CODE, Const.WARNING_NO_DATA__MSG);
                 }
                 else
                 {
-                    return new BusinessResult(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, request);
+                    return new BusinessResult(Const.SUCCESS_READ_CODE, Const.SUCCESS_READ_MSG, requestDetail);
                 }
             }
             catch (Exception ex)
@@ -76,12 +71,12 @@ namespace Jewelry.Business
             }
         }
 
-        public async Task<IBusinessResult> Save(Request request)
+        public async Task<IBusinessResult> Save(RequestDetail requestDetail)
         {
             try
             {
                 //int result = await _currencyRepository.CreateAsync(currency);
-                int result = await _unitOfWork.RequestRepository.CreateAsync(request);
+                int result = await _unitOfWork.RequestDetailRepository.CreateAsync(requestDetail);
                 if (result > 0)
                 {
                     return new BusinessResult(Const.SUCCESS_CREATE_CODE, Const.SUCCESS_CREATE_MSG);
@@ -97,11 +92,11 @@ namespace Jewelry.Business
             }
         }
 
-        public async Task<IBusinessResult> Update(Request request)
+        public async Task<IBusinessResult> Update(RequestDetail requestDetail)
         {
             try
             {
-                int result = await _unitOfWork.RequestRepository.UpdateAsync(request);
+                int result = await _unitOfWork.RequestDetailRepository.UpdateAsync(requestDetail);
 
                 if (result > 0)
                 {
@@ -122,11 +117,11 @@ namespace Jewelry.Business
         public async Task<IBusinessResult> DeleteById(string code)
         {
             try
-            {          
-                var request = await _unitOfWork.RequestRepository.GetByIdAsync(code);
-                if (request != null)
+            {
+                var requestDetail = await _unitOfWork.RequestDetailRepository.GetByIdAsync(code);
+                if (requestDetail != null)
                 {
-                    var result = await _unitOfWork.RequestRepository.RemoveAsync(request);
+                    var result = await _unitOfWork.RequestDetailRepository.RemoveAsync(requestDetail);
                     if (result)
                     {
                         return new BusinessResult(Const.SUCCESS_DELETE_CODE, Const.SUCCESS_DELETE_MSG);
@@ -146,8 +141,5 @@ namespace Jewelry.Business
                 return new BusinessResult(-4, ex.ToString());
             }
         }
-
     }
 }
-
-            

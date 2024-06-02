@@ -5,8 +5,64 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Jewelry.WpfApp.UI"
         mc:Ignorable="d"
-        Title="wRequest" Height="450" Width="800">
+        Title="wRequest" Height="450" Width="1000">
     <Grid>
-        
+        <StackPanel Orientation="Vertical">
+            <GroupBox Header="Request Form" Margin="10">
+                <Grid Height="50">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Column="0" Grid.Row="0" Content="Request ID" HorizontalAlignment="Left" VerticalContentAlignment="Center" />
+                    <TextBox Grid.Column="1" Grid.Row="0" x:Name="RequestId" Height="25" Text="{Binding Path=Request.Id, Mode=TwoWay}"  Margin="5"  Width="180" HorizontalAlignment="Left"/>
+                    <Label Grid.Column="2" Grid.Row="0" Content="Customer ID" HorizontalAlignment="Left" VerticalContentAlignment="Center" />
+                    <TextBox Grid.Row="0" Grid.Column="3" x:Name="CusId" Height="25" Text="{Binding Path=Request.CusId, Mode=TwoWay}"  Margin="5"  Width="180" HorizontalAlignment="Left"/>
+                    <Label Grid.Column="4" Grid.Row="0" Content="Total Price" HorizontalAlignment="Left" VerticalContentAlignment="Center" />
+                    <TextBox Grid.Column="5" Grid.Row="0" x:Name="TotalPrice" Height="25" Text="{Binding Path=Request.TotalPrice, Mode=TwoWay}"  Margin="5"  Width="180" HorizontalAlignment="Left"/>
+                </Grid>
+            </GroupBox>
+            <StackPanel Height="40" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="ButtonSave" Content="Save" Height="30" Width="80" Click="ButtonSave_Click"/>
+                <Button x:Name="ButtonCancel" Content="Cancel" Height="30" Width="80" Click="ButtonCancel_Click"/>
+            </StackPanel>
+            <StackPanel Height="210">
+                <DataGrid x:Name="grdRequest" AutoGenerateColumns="False" ItemsSource="{Binding Request}" CanUserAddRows="False" Height="200" Margin="10">
+                    <DataGrid.Columns>
+                        <!--<DataGridTextColumn Header="Code" Binding="{Binding Path=Id}" Visibility="Hidden"/>-->
+                        <DataGridTextColumn Header="Request ID" Binding="{Binding Path=Id}" Visibility="Visible"/>
+                        <DataGridTextColumn Header="Customer ID" Binding="{Binding Path=CusId}" Width="100"  IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Total Price" Binding="{Binding Path=TotalPrice}" Width="100"  IsReadOnly="True"/>
+
+                        <DataGridTemplateColumn Width="50">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Select" x:Name="ButtonEdit" CommandParameter="{Binding Path=Id}" Click="grdRequest_ButtonSelect_Click"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <!--<DataGridTemplateColumn Width="50">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Delete" x:Name="ButtonDelete" CommandParameter="{Binding Path=Id}"
+                            Command="{Binding Path=DataContext.DeleteCommand, RelativeSource={RelativeSource FindAncestor,
+                                    AncestorType=Window}}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>-->
+
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
+        </StackPanel>
     </Grid>
 </Window>

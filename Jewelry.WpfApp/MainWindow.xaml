@@ -12,9 +12,6 @@
                 <MenuItem Header="Request" IsCheckable="False" FontSize="12" Click="Open_wRequest_Click">
 
                 </MenuItem>
-                <MenuItem Header="TopUp" IsCheckable="False" FontSize="12" Click="Open_wTopup_Click">
-
-                </MenuItem>
             </MenuItem>
         </Menu>
     </Grid>
