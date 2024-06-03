@@ -95,7 +95,6 @@ public partial class JewelryProductionOrderSystemDBContext : DbContext
         modelBuilder.Entity<Result>(entity =>
         {
             entity
-                .HasNoKey()
                 .ToTable("Result");
 
             entity.Property(e => e.CusId)

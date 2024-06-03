@@ -28,5 +28,26 @@ namespace Jewelry.WpfApp
             p.Owner = this;
             p.Show();
         }
+
+        private void Open_wRequestDetail_Click(object sender, RoutedEventArgs e)
+        {
+            var p = new wRequestDetail();
+            p.Owner = this;
+            p.Show();
+        }
+
+        private void Open_wResult_Click(object sender, RoutedEventArgs e)
+        {
+            var p = new wResult();
+            p.Owner = this;
+            p.Show();
+        }
+
+        private void Open_wCustomer_Click(object sender, RoutedEventArgs e)
+        {
+            var p = new wCustomer();
+            p.Owner = this;
+            p.Show();
+        }
     }
 }

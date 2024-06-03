@@ -12,6 +12,15 @@
                 <MenuItem Header="Request" IsCheckable="False" FontSize="12" Click="Open_wRequest_Click">
 
                 </MenuItem>
+                <MenuItem Header="Request Detail" IsCheckable="False" FontSize="12" Click="Open_wRequestDetail_Click">
+
+                </MenuItem>
+                <MenuItem Header="Result" IsCheckable="False" FontSize="12" Click="Open_wResult_Click">
+
+                </MenuItem>
+                <MenuItem Header="Customer" IsCheckable="False" FontSize="12" Click="Open_wCustomer_Click">
+
+                </MenuItem>
             </MenuItem>
         </Menu>
     </Grid>

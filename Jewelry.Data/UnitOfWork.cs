@@ -11,8 +11,10 @@ namespace Jewelry.Data
     {
         private RequestRepository _request;
         private RequestDetailRepository _requestDetail;
+        private ResultRepository _result;
+        private CustomerRepository _customer;
 
-        public UnitOfWork() 
+        public UnitOfWork()
         {
         }
 
@@ -29,6 +31,22 @@ namespace Jewelry.Data
             get
             {
                 return _requestDetail ??= new Repository.RequestDetailRepository();
+            }
+        }
+
+        public ResultRepository ResultRepository
+        {
+            get
+            {
+                return _result ??= new Repository.ResultRepository();
+            }
+        }
+
+        public CustomerRepository CustomerRepository
+        {
+            get
+            {
+                return _customer ??= new Repository.CustomerRepository();
             }
         }
     }
