@@ -35,7 +35,8 @@
                 <Button x:Name="ButtonCancel" Content="Cancel" Height="30" Width="80" Click="ButtonCancel_Click"/>
             </StackPanel>
             <StackPanel Height="210">
-                <DataGrid x:Name="grdRequest" AutoGenerateColumns="False" ItemsSource="{Binding Request}" CanUserAddRows="False" Height="200" Margin="10">
+                <DataGrid x:Name="grdRequest" AutoGenerateColumns="False" ItemsSource="{Binding Request}" CanUserAddRows="False" Height="200" Margin="10"
+                          MouseDoubleClick="grdRequest_MouseDouble_Click" SelectionMode="Single" SelectionUnit="FullRow">
                     <DataGrid.Columns>
                         <!--<DataGridTextColumn Header="Code" Binding="{Binding Path=Id}" Visibility="Hidden"/>-->
                         <DataGridTextColumn Header="Request ID" Binding="{Binding Path=Id}" Visibility="Visible"/>
@@ -45,7 +46,7 @@
                         <DataGridTemplateColumn Width="50">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Button Content="Select" x:Name="ButtonEdit" CommandParameter="{Binding Path=Id}" Click="grdRequest_ButtonSelect_Click"/>
+                                    <Button Content="X" x:Name="ButtonDelete" CommandParameter="{Binding Path=Id}" Click="grdRequest_ButtonDelete_Click"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

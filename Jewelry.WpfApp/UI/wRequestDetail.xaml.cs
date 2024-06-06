@@ -27,7 +27,7 @@ namespace Jewelry.WpfApp.UI
         {
             InitializeComponent();
             this._business = new RequestDetailBusiness();
-            this.LoadGrdRequest();
+            this.LoadGrdRequestDetail();
         }
 
         private async void ButtonSave_Click(object sender, RoutedEventArgs e)
@@ -48,18 +48,24 @@ namespace Jewelry.WpfApp.UI
                     };
 
                     var result = await _business.Save(requestDetail);
-                    MessageBox.Show(result.Message, "Save");
-
-                    RequestDetailID.Text = string.Empty;
-                    Name.Text = string.Empty;
-                    Jewelry.Text = string.Empty;
-                    Price.Text = string.Empty;
-                    RequestID.Text = string.Empty;
+                    MessageBox.Show(result.Message, "Save");   
                 }
                 else
                 {
-                    MessageBox.Show("Exist request detail ID", "Warning");
+                    var requestDetail = item.Data as RequestDetail;
+                    requestDetail.Name = Name.Text;
+                    requestDetail.Jewelry = Jewelry.Text;
+                    requestDetail.Price = Price.Text;
+                    requestDetail.ReqId = RequestID.Text;
+                    var result = await _business.Update(requestDetail);
+                    MessageBox.Show(result.Message, "Save");
                 }
+                RequestDetailID.Text = string.Empty;
+                Name.Text = string.Empty;
+                Jewelry.Text = string.Empty;
+                Price.Text = string.Empty;
+                RequestID.Text = string.Empty;
+                this.LoadGrdRequestDetail();
             }
             catch (Exception ex)
             {
@@ -93,8 +99,52 @@ namespace Jewelry.WpfApp.UI
                 }
             }
         }
+        private async void grdRequestDetail_MouseDouble_Click(object sender, RoutedEventArgs e)
+        {
+            //MessageBox.Show("Double Click on Grid");
+            DataGrid grd = sender as DataGrid;
+            if (grd != null && grd.SelectedItems != null && grd.SelectedItems.Count == 1)
+            {
+                var row = grd.ItemContainerGenerator.ContainerFromItem(grd.SelectedItem) as DataGridRow;
+                if (row != null)
+                {
+                    var item = row.Item as RequestDetail;
+                    if (item != null)
+                    {
+                        var requestDetailResult = await _business.GetById(item.Id);
 
-        private async void LoadGrdRequest()
+                        if (requestDetailResult.Status > 0 && requestDetailResult.Data != null)
+                        {
+                            item = requestDetailResult.Data as RequestDetail;
+                            RequestDetailID.Text = item.Id;
+                            Name.Text = item.Name;
+                            Jewelry.Text = item.Jewelry;
+                            Price.Text = item.Price;
+                            RequestID.Text = item.ReqId;
+                        }
+                    }
+                }
+            }
+        }
+        private async void grdRequestDetail_ButtonDelete_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn = (Button)sender;
+
+            string requestDetailID = btn.CommandParameter.ToString();
+
+            if (!string.IsNullOrEmpty(requestDetailID))
+            {
+                if (MessageBox.Show("Do you want to delete this item?", "Delete",
+                    MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    var result = await _business.DeleteById(requestDetailID);
+                    MessageBox.Show($"{result.Message}", "Delete");
+                    this.LoadGrdRequestDetail();
+                }
+            }
+        }
+
+        private async void LoadGrdRequestDetail()
         {
             var result = await _business.GetAll();
 

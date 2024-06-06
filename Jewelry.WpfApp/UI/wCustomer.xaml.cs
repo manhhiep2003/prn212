@@ -47,16 +47,23 @@ namespace Jewelry.WpfApp.UI
 
                     var result = await _business.Save(customer);
                     MessageBox.Show(result.Message, "Save");
-
-                    CustomerID.Text = string.Empty;
-                    Name.Text = string.Empty;
-                    Phone.Text = string.Empty;
-                    Address.Text = string.Empty;
+                  
                 }
                 else
                 {
-                    MessageBox.Show("Exist customer ID", "Warning");
+                    var customer = item.Data as Customer;
+                    customer.Id = CustomerID.Text;
+                    customer.CustomerName = Name.Text;
+                    customer.CustomerPhone = Phone.Text;
+                    customer.CustomerAddress = Address.Text;
+                    var result = await _business.Update(customer);
+                    MessageBox.Show(result.Message, "Save");
                 }
+                CustomerID.Text = string.Empty;
+                Name.Text = string.Empty;
+                Phone.Text = string.Empty;
+                Address.Text = string.Empty;
+                this.LoadGrdCustomer();
             }
             catch (Exception ex)
             {
@@ -87,6 +94,50 @@ namespace Jewelry.WpfApp.UI
                 }
             }
         }
+        private async void grdCustomer_MouseDouble_Click(object sender, RoutedEventArgs e)
+        {
+            //MessageBox.Show("Double Click on Grid");
+            DataGrid grd = sender as DataGrid;
+            if (grd != null && grd.SelectedItems != null && grd.SelectedItems.Count == 1)
+            {
+                var row = grd.ItemContainerGenerator.ContainerFromItem(grd.SelectedItem) as DataGridRow;
+                if (row != null)
+                {
+                    var item = row.Item as Customer;
+                    if (item != null)
+                    {
+                        var customerResult = await _business.GetById(item.Id);
+
+                        if (customerResult.Status > 0 && customerResult.Data != null)
+                        {
+                            item = customerResult.Data as Customer;
+                            CustomerID.Text = item.Id;
+                            Name.Text = item.CustomerName;
+                            Phone.Text = item.CustomerPhone;
+                            Address.Text = item.CustomerAddress;
+                        }
+                    }
+                }
+            }
+        }
+        private async void grdCustomer_ButtonDelete_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn = (Button)sender;
+
+            string customerID = btn.CommandParameter.ToString();
+
+            if (!string.IsNullOrEmpty(customerID))
+            {
+                if (MessageBox.Show("Do you want to delete this item?", "Delete",
+                    MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    var result = await _business.DeleteById(customerID);
+                    MessageBox.Show($"{result.Message}", "Delete");
+                    this.LoadGrdCustomer();
+                }
+            }
+        }
+
         private async void LoadGrdCustomer()
         {
             var result = await _business.GetAll();

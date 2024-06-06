@@ -53,20 +53,30 @@ namespace Jewelry.WpfApp.UI
 
                     var jewelryResult = await _business.Save(result);
                     MessageBox.Show(jewelryResult.Message, "Save");
-
-                    ResultID.Text = string.Empty;
-                    CustomerID.Text = string.Empty;
-                    ProductName.Text = string.Empty;
-                    ProductImage.Text = string.Empty;
-                    TotalPrice.Text = string.Empty;
-                    Status.Text = string.Empty;
-                    TransferType.Text = string.Empty;
-                    RequestID.Text = string.Empty;
+                  
                 }
                 else
                 {
-                    MessageBox.Show("Exist result ID", "Warning");
+                    var result = item.Data as Result;
+                    result.CusId = CustomerID.Text;
+                    result.ProductName = ProductName.Text;
+                    result.ProductImage = ProductImage.Text;
+                    result.TotalPrice = TotalPrice.Text;
+                    result.Status = Status.Text;
+                    result.TransferType = TransferType.Text;
+                    result.ReqId = RequestID.Text;
+                    var jewelryResult = await _business.Update(result);
+                    MessageBox.Show(jewelryResult.Message, "Save");
                 }
+                ResultID.Text = string.Empty;
+                CustomerID.Text = string.Empty;
+                ProductName.Text = string.Empty;
+                ProductImage.Text = string.Empty;
+                TotalPrice.Text = string.Empty;
+                Status.Text = string.Empty;
+                TransferType.Text = string.Empty;
+                RequestID.Text = string.Empty;
+                this.LoadGrdResult();
             }
             catch (Exception ex)
             {
@@ -100,6 +110,55 @@ namespace Jewelry.WpfApp.UI
                     Status.Text = item.Status;
                     TransferType.Text = item.TransferType;
                     RequestID.Text = item.ReqId;
+                }
+            }
+        }
+
+        private async void grdResult_MouseDouble_Click(object sender, RoutedEventArgs e)
+        {
+            //MessageBox.Show("Double Click on Grid");
+            DataGrid grd = sender as DataGrid;
+            if (grd != null && grd.SelectedItems != null && grd.SelectedItems.Count == 1)
+            {
+                var row = grd.ItemContainerGenerator.ContainerFromItem(grd.SelectedItem) as DataGridRow;
+                if (row != null)
+                {
+                    var item = row.Item as Result;
+                    if (item != null)
+                    {
+                        var jewelryResult = await _business.GetById(item.Id);
+
+                        if (jewelryResult.Status > 0 && jewelryResult.Data != null)
+                        {
+                            item = jewelryResult.Data as Result;
+                            ResultID.Text = item.Id;
+                            CustomerID.Text = item.CusId;
+                            ProductName.Text = item.ProductName;
+                            ProductImage.Text = item.ProductImage;
+                            TotalPrice.Text = item.TotalPrice;
+                            Status.Text = item.Status;
+                            TransferType.Text = item.TransferType;
+                            RequestID.Text = item.ReqId;
+                        }
+                    }
+                }
+            }
+        }
+
+        private async void grdResult_ButtonDelete_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn = (Button)sender;
+
+            string resultID = btn.CommandParameter.ToString();
+
+            if (!string.IsNullOrEmpty(resultID))
+            {
+                if (MessageBox.Show("Do you want to delete this item?", "Delete",
+                    MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    var result = await _business.DeleteById(resultID);
+                    MessageBox.Show($"{result.Message}", "Delete");
+                    this.LoadGrdResult();
                 }
             }
         }
